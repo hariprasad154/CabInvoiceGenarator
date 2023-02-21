@@ -1,5 +1,6 @@
 package com.bridgelabs;
 
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,7 +9,7 @@ public class InvoiceServiceTest {
     InvoiceGenerator invoiceGenerator = null;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         invoiceGenerator = new InvoiceGenerator();
     }
 
@@ -30,22 +31,22 @@ public class InvoiceServiceTest {
     }
 
     @Test
-    public void givenMultipleRides_shouldReturnTotalFare() {
-
-        Ride[] rides = { new Ride(2.0, 5),
-                new Ride(0.1, 1) , new Ride (5.0, 4)
-        };
-        double fare = invoiceGenerator.calculateFare(rides);
-        Assert.assertEquals(84, fare, 0.0);
+    public void givenMultipleRides_ShouldReturnInvoiceSummary() {
+        Ride[] rides = { new Ride(25, 30), new Ride(12, 20) };
+        InvoiceSummary summary = invoiceGenerator.calculateFare(rides);
+        InvoiceSummary expectedInvoiceSummary = new InvoiceSummary(2, 420);
+        Assert.assertEquals(expectedInvoiceSummary, summary);
     }
 
     @Test
-    public void givenMultipleRides_ShouldReturnInvoiceSummary() {
-        Ride[] rides = { new Ride(25, 30),
-                new Ride(12, 20)
-        };
-        InvoiceSummary invoiceSummary = invoiceGenerator.getInvoiceSummary(rides);
-        InvoiceSummary summary = new InvoiceSummary(2, 420);
-        Assert.assertEquals(summary, invoiceSummary);
+    public void givenUserId_shouldReturnInvoiceSummary() {
+        String userId = "shwetaprasad48@gmail.com";
+        Ride[] rides ={new Ride(2.0,5),
+                new Ride(0.1,1)};
+        invoiceGenerator.addRides(userId,rides);
+        InvoiceSummary summary=invoiceGenerator.calculateFare(rides, "normal");
+        InvoiceSummary invoiceSummary = invoiceGenerator.getInvoiceSummary(userId);
+        Assert.assertEquals(invoiceSummary, summary);
+
     }
 }
